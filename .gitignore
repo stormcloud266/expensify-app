@@ -2,3 +2,5 @@ node_modules/
 .DS_Store
 public/bundle.js.map
 public/styles.css.map
+.env.development
+.env.test
