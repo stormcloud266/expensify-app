@@ -13,10 +13,12 @@ if (process.env.NODE_ENV === 'test') {
 
 module.exports = (env) => {
   const isProduction = env === 'production';
-  const CSSExtract = new ExtractTextPlugin('styles.css');
 
   return {
-    entry: './src/app.js',
+    entry: [
+      'babel-polyfill',
+      './src/app.js'
+    ],
     output: {
       path: path.join(__dirname, 'public', 'dist'),
       filename: 'bundle.js'
@@ -27,23 +29,6 @@ module.exports = (env) => {
         test: /\.js$/,
         exclude: /node_modules/
       }, {
-        // test:/\.s?css$/,
-        // use: CSSExtract.extract({
-        //   use: [
-        //     {
-        //       loader: 'css-loader',
-        //       options: {
-        //         sourceMap: true
-        //       }
-        //     },
-        //     {
-        //       loader: 'sass-loader',
-        //       options: {
-        //         sourceMap: true
-        //       }
-        //     }
-        //   ]
-        // })
         test:/\.s?css$/,
         use: [
            MiniCssExtractPlugin.loader,
@@ -53,8 +38,9 @@ module.exports = (env) => {
       }]
     },
     plugins: [
-      // CSSExtract
-      new MiniCssExtractPlugin(),
+      new MiniCssExtractPlugin({
+      filename: "styles.css",
+    }),
       new webpack.DefinePlugin({
         'process.env.FIREBASE_API_KEY': JSON.stringify(process.env.FIREBASE_API_KEY),
         'process.env.FIREBASE_AUTH_DOMAIN': JSON.stringify(process.env.FIREBASE_AUTH_DOMAIN),
